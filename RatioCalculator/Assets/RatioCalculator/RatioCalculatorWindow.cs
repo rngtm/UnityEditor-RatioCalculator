@@ -17,7 +17,7 @@ namespace RatioCalculator
         static readonly GUILayoutOption[] treeViewLayoutOptions = new GUILayoutOption[]
         {
             GUILayout.MinHeight(120f),
-            GUILayout.ExpandHeight(false),
+            GUILayout.ExpandHeight(true), // 広げる
         };
 
         private bool isOpen_Multiplication = true;
@@ -29,10 +29,12 @@ namespace RatioCalculator
         private RatioTreeView_Magnification treeView_Magnification = null; // TreeView(乗算)
         private TreeViewState treeViewState_Magnification = null; // TreeViewの状態
 
+        [SerializeField]
         private List<RatioTreeView_Multiplication.TreeElement> multiplyDataList = new List<RatioTreeView_Multiplication.TreeElement>  {
             new RatioTreeView_Multiplication.TreeElement { Value1 = 100f , Value2 = 0.3f },
         };
 
+        [SerializeField]
         private List<RatioTreeView_Magnification.TreeElement> magnificationDataList = new List<RatioTreeView_Magnification.TreeElement>  {
             new RatioTreeView_Magnification.TreeElement { Value1 = 100f , Value2 = 160f , Value3 = 1.0f },
             new RatioTreeView_Magnification.TreeElement { Value1 = 100f , Value2 = 160f , Value3 = 1.5f },
