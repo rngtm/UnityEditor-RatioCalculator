@@ -122,23 +122,22 @@ namespace RatioCalculator
                         rect.width -= valueFieldSpace + valueFieldMarginLeft + valueFieldMarginRight;
                         rect.width /= 2f;
                         rect.x += valueFieldMarginLeft;
-
-                        // value 3
+                        
                         EditorGUI.BeginChangeCheck();
                         element.Value3 = EditorGUI.FloatField(rect, element.Value3);
                         changeValue3 = EditorGUI.EndChangeCheck();
 
                         rect.x += rect.width + valueFieldSpace;
 
-                        // value 4
                         EditorGUI.BeginChangeCheck();
                         element.Value4 = EditorGUI.FloatField(rect, element.Value4);
                         changeValue4 = EditorGUI.EndChangeCheck();
                         break;
-                    case 3: 
+                    case 3: // ボタン表示
                         rect.width /= 2;
                         if (GUI.Button(rect, "+"))
                         {
+                            // 要素を複製して追加
                             baseElements.Insert(element.Id, new TreeElement
                             {
                                 Name = element.Name,
@@ -164,20 +163,10 @@ namespace RatioCalculator
                         break;
                 }
 
-                if (changeValue1 || changeValue2)
-                {
-                    element.UpdateValue4();
-                }
-
-                if (changeValue3)
-                {
-                    element.UpdateValue4();
-                }
-
-                if (changeValue4)
-                {
-                    element.UpdateValue3();
-                }
+                if (changeValue1) { element.UpdateValue4(); }
+                if (changeValue2) { element.UpdateValue3(); }
+                if (changeValue3) { element.UpdateValue4(); }
+                if (changeValue4) { element.UpdateValue3(); }
             }
         }
 
