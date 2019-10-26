@@ -4,21 +4,25 @@
 ///------------------------
 namespace RatioCalculator
 {
+    using System;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditor.IMGUI.Controls;
     using UnityEngine;
 
-    public class RatioTreeView : TreeView
+    /// <summary>
+    /// 数値と係数を指定して計算を行うTreeView
+    /// </summary>
+    public class RatioTreeView_Multiplication : TreeView, IRatioTreeView
     {
-        private List<RatioTreeElement> baseElements = null; // 要素
+        private List<TreeElement> baseElements = null; // 要素
 
-        private const float nameFieldWidth = 80f;
-        private const float value1FieldWidth = 80f;
+        private const float nameFieldWidth = MyStyle.NameFieldWidth;
+        private const float value1FieldWidth = 78f;
         private const float value2FieldWidth = 80f;
         private const float rateFieldWidth = 60f;
         private const float ratePopupWidth = 75f;
-        private const float buttonWidth = 20f;
+        private const float buttonWidth = MyStyle.ButtonWidth;
 
         private static string[] templatePopupDisplayNames = new string[]
         {
@@ -45,7 +49,7 @@ namespace RatioCalculator
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public RatioTreeView(TreeViewState state)
+        public RatioTreeView_Multiplication(TreeViewState state)
             : base(new TreeViewState(), new MultiColumnHeader(new MultiColumnHeaderState(new[]
             {
                 new MultiColumnHeaderState.Column() {
@@ -54,17 +58,17 @@ namespace RatioCalculator
                     autoResize = false,
                 },
                 new MultiColumnHeaderState.Column() {
-                    headerContent = new GUIContent("数値"),
+                    headerContent = new GUIContent("数値(A)"),
                     width = value1FieldWidth,
                     autoResize = false,
                 },
                 new MultiColumnHeaderState.Column() {
-                    headerContent = new GUIContent("係数"),
+                    headerContent = new GUIContent("係数(B)"),
                     width = rateFieldWidth + ratePopupWidth,
                     autoResize = false,
                 },
                 new MultiColumnHeaderState.Column() {
-                    headerContent = new GUIContent("結果"),
+                    headerContent = new GUIContent("結果(A*B)"),
                     width = value2FieldWidth,
                     autoResize = false,
                 },
@@ -78,6 +82,13 @@ namespace RatioCalculator
         {
             showAlternatingRowBackgrounds = true; // 背景のシマシマを表示
             showBorder = true; // 境界線を表示　
+        }
+
+        public void AddItem()
+        {
+            baseElements.Add(new TreeElement());
+            Update();
+            Reload();
         }
 
         /// <summary>
@@ -136,7 +147,7 @@ namespace RatioCalculator
                         rect.width /= 2;
                         if (GUI.Button(rect, "+"))
                         {
-                            baseElements.Insert(element.Id, new RatioTreeElement
+                            baseElements.Insert(element.Id, new TreeElement
                             {
                                 Name = element.Name,
                                 TemplateIndex = element.TemplateIndex,
@@ -208,7 +219,7 @@ namespace RatioCalculator
         /// <summary>
         /// モデルとItemから再帰的に子Itemを作成・追加する
         /// </summary>
-        private void AddChildrenRecursive(RatioTreeElement model, TreeViewItem item)
+        private void AddChildrenRecursive(TreeElement model, TreeViewItem item)
         {
             foreach (var childModel in model.Children)
             {
@@ -221,7 +232,7 @@ namespace RatioCalculator
         /// <summary>
         /// 要素を作成
         /// </summary>
-        private TreeViewItem CreateTreeViewItem(RatioTreeElement model)
+        private TreeViewItem CreateTreeViewItem(TreeElement model)
         {
             return new TreeViewItem { id = model.Id, displayName = "Label" };
         }
@@ -229,7 +240,7 @@ namespace RatioCalculator
         /// <summary>
         /// TreeView初期化
         /// </summary>
-        public void Setup(List<RatioTreeElement> list)
+        public void Setup(List<TreeElement> list)
         {
             baseElements = list;
             Update();
@@ -285,6 +296,53 @@ namespace RatioCalculator
                     break;
             }
             return rate;
+        }
+
+        [System.Serializable]
+        public class TreeElement
+        {
+            [SerializeField] public int TemplateIndex = 0;
+            [SerializeField] public string Name = "---"; // 名前
+            [SerializeField] public float Value1 = 0f; // 数値
+            [SerializeField] public float Rate = 0f; // 割合
+            [SerializeField] public float Value2 = 0f; // 結果
+
+            public int Id { get; set; } = 0; // 要素のId
+            public TreeElement Parent { get; private set; } = null; // 親の要素
+            public List<TreeElement> Children { get; } = new List<TreeElement>(); // 子の要素
+
+            public void Update()
+            {
+                Value2 = Value1 * Rate;
+            }
+
+            /// <summary>
+            /// 子を追加
+            /// </summary>
+            internal void AddChild(TreeElement child)
+            {
+                // 既に親がいたら削除
+                if (child.Parent != null)
+                {
+                    child.Parent.RemoveChild(child);
+                }
+
+                // 親子関係を設定
+                Children.Add(child);
+                child.Parent = this;
+            }
+
+            /// <summary>
+            /// 子を削除
+            /// </summary>
+            public void RemoveChild(TreeElement child)
+            {
+                if (Children.Contains(child))
+                {
+                    Children.Remove(child);
+                    child.Parent = null;
+                }
+            }
         }
     }
 }
