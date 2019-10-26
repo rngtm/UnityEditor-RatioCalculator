@@ -1,4 +1,8 @@
-﻿namespace RatioCalculator
+﻿///------------------------
+/// Ratio Calculator
+/// @ 2019 RNGTM
+///------------------------
+namespace RatioCalculator
 {
     public static class MyStyle
     {
