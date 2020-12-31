@@ -84,7 +84,6 @@ namespace RatioCalculator
             {
                 var rect = args.GetCellRect(visibleColumnIndex);
                 rect.y += 1f;
-                rect.height -= 2f;
 
                 var columnIndex = args.GetColumn(visibleColumnIndex);
                 var element = baseElements[args.item.id];
