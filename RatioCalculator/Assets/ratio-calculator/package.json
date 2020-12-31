@@ -4,6 +4,10 @@
     "version": "1.0.0",               
     "unity": "2021.1",
     "description": "Ratio Caltulator",
+    "author": {
+        "name": "r-ngtm",
+        "url": "https://github.com/rngtm"
+    },
     "dependencies": {
     }
 }
