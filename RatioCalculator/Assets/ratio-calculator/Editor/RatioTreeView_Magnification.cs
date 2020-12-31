@@ -87,9 +87,6 @@ namespace RatioCalculator
                 rect.height -= 2f;
 
                 var columnIndex = args.GetColumn(visibleColumnIndex);
-                var labelStyle = args.selected ? EditorStyles.whiteLabel : EditorStyles.label;
-                labelStyle.alignment = TextAnchor.MiddleCenter;
-
                 var element = baseElements[args.item.id];
 
                 bool changeValue1 = false;
