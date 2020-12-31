@@ -1,6 +1,5 @@
 {
     "name": "com.rngtm.ratio-caltulator",
-    "package.json-name": "https://github.com/rngtm/UnityEditor-RatioCalculator.git", 
     "displayName": "Ratio Caltulator", 
     "version": "1.0.0",               
     "unity": "2021.1",
