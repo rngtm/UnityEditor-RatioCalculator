@@ -1,0 +1,9 @@
+{
+    "name": "com.rngtm.ratio-caltulator",
+    "displayName": "Ratio Caltulator", 
+    "version": "1.0.0",               
+    "unity": "2021.1",
+    "description": "Ratio Caltulator",
+    "dependencies": {
+    }
+}
